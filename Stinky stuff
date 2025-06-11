@@ -1,0 +1,46 @@
+from random import randint
+from sense_hat import SenseHat
+sense = SenseHat()
+def move(x_pos, y_pos, direction):
+    if direction == "d":
+        x_pos += 1
+    elif direction == "a":
+        x_pos -= 1
+    elif direction == "w":
+        y_pos -= 1
+    elif direction == "s":
+        y_pos += 1
+    return x_pos, y_pos
+white = (255,255,255)
+black = (0,0,0)
+green = (0, 255, 0)
+x = 0
+y = 0
+display = []
+class chunk:
+  def __init__(self, x, y):
+    self.position = [x, y]
+    self.contents = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+    
+  def create_chunk(self):
+    for i in range(0,16):
+      for z in range(0,16):
+        if i > 7:
+          add = white
+        elif i == 5:
+           add = green 
+        if i < 5:
+          add = black
+        self.contents[i].append(add)
+chunk1 = chunk(0, 0)
+chunk1.create_chunk()
+chunks = [chunk1]
+
+while True:
+    display = []
+    for t in range(0,8):
+      for z in range(0,8):
+        display.append(chunks[0].contents[y+t][x+z])
+    sense.set_pixels(display)
+    direction = input()
+    x, y = move(x, y, direction)
