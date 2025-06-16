@@ -25,22 +25,23 @@ class Chunk:
         else:
           col = black
         self.contents[y].append(col)
+
 def create_chunk(chunks, direction):
   if direction == "r":
-    new_chunk = Chunk(0, chunks[len(chunks)-1].position[0] + 1)
+    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0)
     new_chunk.generate_chunk()
     chunks.append(new_chunk)
   else:
-    new_chunk = Chunk(0, chunks[0].position[0] - 1)
+    new_chunk = Chunk(chunks[0].position[0] - 1, 0)
     new_chunk.generate_chunk()
     chunks.insert(0,new_chunk)
   return chunks
 
 def create_check(chunks, pos):
-  if chunks[len(chunks) - 1] == chunks[pos]:
+  if chunks[len(chunks) - 1] == chunks[pos[0]]:
     d = "r"
     chunks = create_chunk(chunks, d)
-  elif chunks[0] == chunks[pos]:
+  if chunks[0] == chunks[pos[0]]:
     d = "l"
     chunks = create_chunk(chunks, d)
   return chunks
@@ -49,17 +50,20 @@ def create_check(chunks, pos):
 chunk1 = Chunk(0, 0)
 chunks = [chunk1]
 chunk1.generate_chunk()
-pos = 0
+pos = [0,0]
 while True:
   display = []
   for x in range(0, 8):
     for y in range(0, 8):
-      display.append(chunks[pos].contents[x][y])
+      display.append(chunks[pos[0]].contents[x][y])
   sense.set_pixels(display)
   create_check(chunks, pos)
-  ad = input()
-  if ad == "d":
-    pos += 1
-  else:
-    pos -= 1
+  wasd = input()
+  if wasd == "d":
+    pos[0] += 1
+  elif wasd == "a":
+    pos[0] -= 1
+  if pos[0] == -1:
+    pos[0] +=1
   print(pos)
+  
