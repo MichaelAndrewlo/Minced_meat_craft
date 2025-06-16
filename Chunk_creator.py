@@ -59,7 +59,9 @@ while True:
   sense.set_pixels(display)
   create_check(chunks, pos)
   wasd = input()
-  if wasd == "d":
+  if wasd == "d" and pos[0] == 0:
+    pos[0] += 2
+  elif wasd == "d":
     pos[0] += 1
   elif wasd == "a":
     pos[0] -= 1
