@@ -72,11 +72,11 @@ chunk_pos = [0,0]
 pos = [10, 10]
 while True:
   create_check(chunks, chunk_pos)
+  if chunk_pos[0] == 0:
+    chunk_pos[0] += 1
   update_display()
   wasd = input()
-  if wasd == "d" and chunk_pos[0] == 0:
-    chunk_pos[0] += 2
-  elif wasd == "d":
+  if wasd == "d":
     chunk_pos[0] += 1
   elif wasd == "a":
     chunk_pos[0] -= 1
