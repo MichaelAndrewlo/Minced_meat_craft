@@ -11,35 +11,38 @@ class Chunk:
   def __init__(self, x, y, level):
     self.position = [x, y]
     self.contents = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
-    self.level = level
+    self.s_level = level
+    self.e_level = level
   
   def generate_chunk_right(self): 
     for x in range(0,16):
-      self.level += randint(-1, 1)
+      if randint(0, 5) > 2:
+        self.e_level += randint(-1, 1)
       for y in range(0,16):
-        if y >= self.level:
+        if y >= self.e_level:
           col = gray
-        elif y > self.level - 3:
+        elif y > self.e_level - 3:
           col = brown
-        elif y == self.level - 3:
+        elif y == self.e_level - 3:
           col = green
         else:
           col = black
         self.contents[y].append(col)
 
   def generate_chunk_left(self): 
-    for x in range(15, -1):
-      self.level += randint(-1, 1)
+    for x in range(16, 0):
+      if randint(0, 5) > 2:
+        self.e_level += randint(-1, 1)
       for y in range(0,16):
-        if y >= self.level:
+        if y >= self.e_level:
           col = gray
-        elif y > self.level - 3:
+        elif y > self.e_level - 3:
           col = brown
-        elif y == self.level - 3:
+        elif y == self.e_level - 3:
           col = green
         else:
           col = black
-        self.contents[y].append(col)
+        self.contents[y].insert(0, col)
 
 class Player:
   def __init__(self, x, y):
