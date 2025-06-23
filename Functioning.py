@@ -12,7 +12,7 @@ class Chunk:
     self.position = [x, y]
     self.contents = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
     self.s_level = level
-    self.e_level = level
+    self.e_level = self.s_level
   
   def generate_chunk_right(self): 
     for x in range(0,16):
@@ -68,11 +68,11 @@ class Player:
 
 def create_chunk(chunks, direction): 
   if direction == "r":
-    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].level )
+    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1]self.e_level )
     new_chunk.generate_chunk_right()
     chunks.append(new_chunk)
   else:
-    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].level)
+    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0]self.e_level)
     new_chunk.generate_chunk_right()
     chunks.insert(0,new_chunk)
   return chunks
@@ -103,7 +103,7 @@ def update_display():
       display.append(loaded_area[player1.pos[1] + x][player1.pos[0] + y])
   sense.set_pixels(display)
   
-chunk1 = Chunk(0, 0, 5)
+chunk1 = Chunk(0, 0, 9)
 chunks = [chunk1]
 chunk1.generate_chunk_right()
 player1 = Player(16, 0)
