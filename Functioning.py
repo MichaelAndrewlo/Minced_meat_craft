@@ -11,19 +11,18 @@ class Chunk:
   def __init__(self, x, y, level):
     self.position = [x, y]
     self.contents = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
-    self.s_level = level
-    self.e_level = self.s_level
+    self.level = level
   
   def generate_chunk_right(self): 
     for x in range(0,16):
       if randint(0, 5) > 2:
-        self.e_level += randint(-1, 1)
+        self.level += randint(-1, 1)
       for y in range(0,16):
-        if y >= self.e_level:
+        if y >= self.level:
           col = gray
-        elif y > self.e_level - 3:
+        elif y > self.level - 3:
           col = brown
-        elif y == self.e_level - 3:
+        elif y == self.level - 3:
           col = green
         else:
           col = black
@@ -34,11 +33,11 @@ class Chunk:
       if randint(0, 5) > 2:
         self.e_level += randint(-1, 1)
       for y in range(0,16):
-        if y >= self.e_level:
+        if y >= self.level:
           col = gray
-        elif y > self.e_level - 3:
+        elif y > self.level - 3:
           col = brown
-        elif y == self.e_level - 3:
+        elif y == self.level - 3:
           col = green
         else:
           col = black
@@ -68,20 +67,20 @@ class Player:
 
 def create_chunk(chunks, direction): 
   if direction == "r":
-    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].e_level )
+    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].level )
     new_chunk.generate_chunk_right()
     chunks.append(new_chunk)
   else:
-    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].e_level)
+    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].level)
     new_chunk.generate_chunk_left()
     chunks.insert(0,new_chunk)
   return chunks
 
 def create_check(chunks, pos): 
-  if chunks[len(chunks) - 1] == chunks[pos[0]]:
+  if chunks[len(chunks) - 1] == chunks[chunk_pos[0]]:
     d = "r"
     chunks = create_chunk(chunks, d)
-  if chunks[0] == chunks[pos[0]]:
+  if chunks[0] == chunks[chunk_pos[0]]:
     d = "l"
     chunks = create_chunk(chunks, d)
   return chunks
