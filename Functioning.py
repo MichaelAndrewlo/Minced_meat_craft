@@ -31,7 +31,7 @@ class Chunk:
   def generate_chunk_left(self): 
     for x in range(0, 16):
       if randint(0, 5) > 2:
-        self.e_level += randint(-1, 1)
+        self.level += randint(-1, 1)
       for y in range(0,16):
         if y >= self.level:
           col = gray
@@ -49,15 +49,15 @@ class Player:
     self.chunk_pos = [0, 0]
   
   def move(self): 
-    wasd = input()
-    if wasd == "d":
-      self.pos[0] += 1
-    elif wasd == "a":
-      self.pos[0] -= 1
-    elif wasd == "w":
-      self.pos[1] -= 1
-    elif wasd == "s":
-      self.pos[1] += 1
+for event in sense.stick.get_events():
+      if event.action == "pressed":
+        if event.direction == "right":
+          self.pos[0] += 1
+        elif event.direction == "left":
+          self.pos[0] -= 1
+        elif event.direction == "up":
+          self.pos[1] -= 1
+        elif event.direction == "down":
     if self.pos[0] == 40:
       self.chunk_pos[0] += 1
       self.pos[0] = 24
