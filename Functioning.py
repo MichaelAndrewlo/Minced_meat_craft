@@ -30,7 +30,7 @@ class Chunk:
         self.contents[y].append(col)
 
   def generate_chunk_left(self): 
-    for x in range(16, 0):
+    for x in range(0, 16):
       if randint(0, 5) > 2:
         self.e_level += randint(-1, 1)
       for y in range(0,16):
@@ -68,12 +68,12 @@ class Player:
 
 def create_chunk(chunks, direction): 
   if direction == "r":
-    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1]self.e_level )
+    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].e_level )
     new_chunk.generate_chunk_right()
     chunks.append(new_chunk)
   else:
-    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0]self.e_level)
-    new_chunk.generate_chunk_right()
+    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].e_level)
+    new_chunk.generate_chunk_left()
     chunks.insert(0,new_chunk)
   return chunks
 
