@@ -20,7 +20,9 @@ class Chunk:
       elif randint(0, 5) == 5 - (self.level - 9):
         self.level -= 1
       for y in range(0,16):
-        if y >= self.level:
+        if y == 15:
+          col = dark_gray
+        elif y >= self.level:
           col = gray
         elif y > self.level - 3:
           col = brown
@@ -37,7 +39,9 @@ class Chunk:
       elif randint(0, 5) == 5 - (self.level - 9):
         self.level -= 1
       for y in range(0,16):
-        if y >= self.level:
+        if y == 15:
+          col = dark_gray
+        elif y >= self.level:
           col = gray
         elif y > self.level - 3:
           col = brown
