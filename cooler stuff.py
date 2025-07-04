@@ -13,13 +13,14 @@ yellow = (255, 255, 0)
 dark_gray = (50, 50, 50)
 dark_blue = (50, 100, 200)
 dark_yellow = (125, 125, 0)
-
+light_blue = (175, 175, 255)
 biomes = {
 0: {"avg_level" : 16, "colours": [brown, green], "change" : 1, "chance" : 5, "levels" : [3, 3]},
 1: {"avg_level" : 17, "colours": [dark_yellow, yellow], "change" : 1, "chance" : 5, "levels" : [3, 3]},
 2: {"avg_level" : 8, "colours": [gray, white], "change" : 2, "chance" : 3, "levels" : [3, 4]},
 "mountain_end": {"avg_level" : 16, "colours": [gray, white], "change" : 2, "chance" : 3, "levels" : [3, 4]},
-3: {"avg_level" : 26, "colours": [dark_blue, blue], "change" : 2 , "chance" : 5, "levels" : [3, 7]}
+3: {"avg_level" : 26, "colours": [dark_yellow, blue], "change" : 2 , "chance" : 4, "levels" : [3, 7]},
+"shore" : {"avg_level" : 17, "colours": [dark_yellow, blue], "change" : 2 , "chance" : 4, "levels" : [3, 7]}
 }
 class Chunk:
   def __init__(self, x, y, level, biome):
@@ -28,7 +29,7 @@ class Chunk:
     self.level = level
     self.biome = biome
   
-  def generate_chunk_right(self): 
+  def generate_chunk_right(self, d): 
     for x in range(0, 32):
       if randint(0, 5) >= self.biome["chance"] + (self.level - self.biome["avg_level"]):
         self.level += randint(1, self.biome["change"])
@@ -36,7 +37,7 @@ class Chunk:
         self.level -= randint(1, self.biome["change"])
       for y in range(0, 32):
         col = black
-        if self.biome == biomes[3]:
+        if self.biome == biomes[3] or self.biome == biomes["shore"]:
           if y >= 14:
             col = self.biome["colours"][1]
         elif y >= self.level - self.biome["levels"][1]:
@@ -47,7 +48,10 @@ class Chunk:
           col = gray
         if y == len(self.contents) - 1:
           col = dark_gray
-        self.contents[y].append(col)
+        if d == "l":
+          self.contents[y].insert(0, col)
+        else:
+          self.contents[y].append(col)
 
   def generate_chunk_left(self): 
     for x in range(0, 32):
@@ -106,13 +110,13 @@ def get_dist(x1, y1, x2, y2):
 def create_chunk(chunks, direction): 
   choice = randint(0,3)
   if direction == "r":
-    if chunks[len(chunks)-1].biome == {"avg_level" : 8, "levels": [gray, white], "change" : 2, "chance" : 3}:
+    if chunks[len(chunks)-1].biome == biomes[2]:
       choice = "mountain_end"
     new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].level, biomes[choice])
     new_chunk.generate_chunk_right()
     chunks.append(new_chunk)
   else:
-    if chunks[0].biome == {"avg_level" : 8, "levels": [gray, white], "change" : 2, "chance" : 3}:
+    if chunks[0].biome == biomes[2] and choice != 2:
       choice = "mountain_end"
     new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].level, biomes[choice])
     new_chunk.generate_chunk_left()
@@ -120,12 +124,25 @@ def create_chunk(chunks, direction):
   return chunks
 
 def create_check(chunks, pos): 
+  choice = randint(0,3)
   if chunks[len(chunks) - 1] == chunks[player1.chunk_pos[0]]:
     d = "r"
-    chunks = create_chunk(chunks, d)
+    if chunks[len(chunks)-1].biome == biomes[2] and choice != biomes[2]:
+      choice = "mountain_end"
+    elif chunks[len(chunks)-1].biome == biomes[3]:
+      choice = "shore"
+    new_chunk = Chunk(chunks[len(chunks)-1].position[0] + 1, 0, chunks[len(chunks)-1].level, biomes[choice])
+    new_chunk.generate_chunk_right(d)
+    chunks.append(new_chunk)
   if chunks[0] == chunks[player1.chunk_pos[0]]:
     d = "l"
-    chunks = create_chunk(chunks, d)
+    if chunks[0].biome == biomes[2] and choice != biomes[2]:
+      choice = "mountain_end"
+    elif chunks[0].biome == biomes[3]:
+      choice = "shore"
+    new_chunk = Chunk(chunks[0].position[0] - 1, 0, chunks[0].level, biomes[choice])
+    new_chunk.generate_chunk_right(d)
+    chunks.insert(0,new_chunk)
   return chunks
     
 def update_display(): 
@@ -147,7 +164,7 @@ def update_display():
   
 chunk1 = Chunk(0, 0, 16, biomes[0])
 chunks = [chunk1]
-chunk1.generate_chunk_right()
+chunk1.generate_chunk_right("r")
 player1 = Player(32, 8)
 while True:
   create_check(chunks, player1.chunk_pos)
